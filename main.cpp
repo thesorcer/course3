@@ -2,25 +2,23 @@
 #include <UniversalTelegramBot.h>
 #include <WiFiClientSecure.h>
 
-// Данные Wi-Fi
+// Your Wi-Fi settings
 const char* ssid = "ssid";
 const char* password = "password";
 
-// Настройка Telegram-бота
+// Teelgram bot initialize
 const String BOT_TOKEN = "123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11";
 X509List cert(TELEGRAM_CERTIFICATE_ROOT);
 const String CHAT_ID = "XXXXXXXXX";
 
-// Объявление объекта для работы с Wi-Fi
 WiFiClientSecure espClient;
 
-// Создание объекта для работы с ботом в Telegram
 UniversalTelegramBot bot(BOT_TOKEN, espClient);
 
 int botRequestDelay = 100;
 unsigned long lastTimeBotRan;
 
-// Структура для работы со светодиодом
+// Struct for LED
 struct LED {
   uint8_t pin;
   bool state = LOW;
@@ -30,7 +28,7 @@ struct LED {
   String getStatus() { return (state == LOW) ? "LED is OFF" : "LED is ON"; }
 };
 
-// Настройка пинов 
+// Pin declaration 
 LED led1(5, LOW);
 uint8_t LDRpin = A0;
 uint8_t PIRpin = 4;
@@ -39,18 +37,17 @@ void handleNewMessages(int numNewMessages);
 
 void setup() {
 
-  // Инициализация последовательного порта для отладочных сообщений
   Serial.begin(115200);
 
-  // Получаем сертификат api.telegram.org
+  // Get certificate api.telegram.org
   espClient.setTrustAnchors(&cert);  
 
-  // Инициализация пинов на вход/выход
+  // Pin initialize
   pinMode(led1.pin, OUTPUT);
   pinMode(LDRpin, INPUT);
   pinMode(PIRpin, INPUT);
 
-  // Подключение к Wi-Fi сети
+  // Wi-Fi connection
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
 
@@ -59,7 +56,6 @@ void setup() {
     Serial.println("Connecting to WiFi..");
   }
 
-  // Вывод IP-адреса после успешного подключения
   Serial.println(WiFi.localIP());
 
   bot.sendMessage(CHAT_ID, "Hello! Telegram bot is ready to go!", "");
@@ -67,7 +63,7 @@ void setup() {
 
 void loop() {
 
-  // Две переменные для хранения значения уровня света и наличия движения
+  // Two variables for light level and motion
   int light = analogRead(LDRpin);
   bool motion = digitalRead(PIRpin);
 
@@ -103,7 +99,7 @@ void handleNewMessages(int numNewMessages) {
     String chat_id = String(bot.messages[i].chat_id);
 
     if (chat_id != CHAT_ID) {
-      bot.sendMessage(chat_id, "Access denied! Please, contact @thesorcer", "");
+      bot.sendMessage(chat_id, "Access denied! Please, contact @(your username)", "");
       continue;
     }
 
@@ -127,7 +123,7 @@ void handleNewMessages(int numNewMessages) {
     }
 
     else if (text == "/start") {
-      bot.sendMessage(chat_id, "Hello! I am a smart home control bot for user @thesorcer.\nClick /help for more information.", "");
+      bot.sendMessage(chat_id, "Hello! I am a smart home control bot for user @(your username).\nClick /help for more information.", "");
     }
 
     else if (text == "/status") {
