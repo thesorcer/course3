@@ -9,4 +9,5 @@ Bot commands:
 /status - get LED status
 
 Use @BotFather telegram bot for get your bot and its token
+
 Use @username_to_id_bot telegram bot for get your CHAT_ID
