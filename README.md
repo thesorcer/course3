@@ -1,6 +1,7 @@
 # course3
 
-3rd course project on ESP8266 with light control by photoresistor and PIR sensor, and by Telegram bot
+3rd course project on ESP8266 with light control by photoresistor MLG4416
+and PIR sensor HC-SR501, using UniversalTelegramBot library by @witnessmenow
 
 Bot commands:
 /help - about bot  
